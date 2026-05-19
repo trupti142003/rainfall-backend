@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rainfall Prediction</title>
+
+    <link rel="stylesheet"
+    href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>🌧 Rainfall Prediction System</h1>
+
+    <form action="/predict" method="POST">
+
+        <label>State</label>
+        <input type="text" name="state" required>
+
+        <label>Month</label>
+
+        <select name="month">
+
+            <option>January</option>
+            <option>February</option>
+            <option>March</option>
+            <option>April</option>
+            <option>May</option>
+            <option>June</option>
+            <option>July</option>
+            <option>August</option>
+            <option>September</option>
+            <option>October</option>
+            <option>November</option>
+            <option>December</option>
+
+        </select>
+
+        <button type="submit">
+            Predict Rainfall
+        </button>
+
+    </form>
+
+    {% if prediction %}
+
+    <div class="result">
+
+        <h2>Prediction Result</h2>
+
+        <p><strong>State:</strong> {{ state }}</p>
+        <p><strong>Month:</strong> {{ month }}</p>
+        <p><strong>Rainfall:</strong> {{ prediction }}</p>
+        <p><strong>Drought Risk:</strong> {{ drought }}</p>
+
+    </div>
+
+    {% endif %}
+
+</div>
+
+</body>
+</html>
