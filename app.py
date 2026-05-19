@@ -7,7 +7,7 @@ import numpy as np
 app = Flask(__name__)
 CORS(app)
 
-# Load model
+# Load trained model
 model = tf.keras.models.load_model(
     "lstm_rainfall_clf_model.keras"
 )
@@ -28,19 +28,28 @@ month_map = {
     "December": 12,
 }
 
-# State rainfall intelligence
+# State rainfall profiles
 state_profiles = {
 
+    # Very high rainfall states
     "Goa": "very_high",
     "Kerala": "very_high",
     "Assam": "very_high",
-    "West Bengal": "high",
+    "Meghalaya": "very_high",
 
-    "Maharashtra": "moderate",
-    "Karnataka": "moderate",
+    # High rainfall states
+    "West Bengal": "high",
+    "Karnataka": "high",
+    "Maharashtra": "high",
+
+    # Moderate rainfall states
     "Tamil Nadu": "moderate",
     "Gujarat": "moderate",
+    "Madhya Pradesh": "moderate",
+    "Uttar Pradesh": "moderate",
+    "Bihar": "moderate",
 
+    # Low rainfall states
     "Rajasthan": "low",
     "Punjab": "low",
     "Haryana": "low",
@@ -54,104 +63,124 @@ def home():
 @app.route('/predict', methods=['POST'])
 def predict():
 
+    # Get user input
     state = request.form['state']
     month = request.form['month']
 
+    # Convert month to number
     month_value = month_map[month]
 
-    # ML model prediction
+    # Model input
     input_data = np.array([
         [[month_value]]
     ])
 
+    # Base ML prediction
     prediction = model.predict(input_data)
 
     rainfall_value = float(prediction[0][0])
 
-    # -----------------------------
-    # AI + Meteorological Intelligence
-    # -----------------------------
-
+    # Get state rainfall profile
     profile = state_profiles.get(state, "moderate")
 
-    # Monsoon season
-    if month in ["June", "July", "August"]:
+    # ------------------------------------
+    # Hybrid Meteorological Intelligence
+    # ------------------------------------
+
+    # Peak Monsoon
+    if month in ["June", "July", "August", "September"]:
 
         if profile == "very_high":
+            rainfall_value += 500
+
+        elif profile == "high":
             rainfall_value += 350
 
-        elif profile == "high":
-            rainfall_value += 250
-
         elif profile == "moderate":
-            rainfall_value += 150
-
-        else:
-            rainfall_value += 40
-
-    # Post monsoon
-    elif month in ["September", "October"]:
-
-        if profile == "very_high":
             rainfall_value += 180
 
+        else:
+            rainfall_value += 50
+
+    # Retreating Monsoon
+    elif month == "October":
+
+        if profile == "very_high":
+            rainfall_value += 250
+
         elif profile == "high":
-            rainfall_value += 120
+            rainfall_value += 180
 
         elif profile == "moderate":
-            rainfall_value += 70
+            rainfall_value += 100
 
-    # Winter
+        else:
+            rainfall_value += 30
+
+    # Winter Season
     elif month in ["November", "December", "January"]:
 
-        rainfall_value -= 30
+        if profile == "very_high":
+            rainfall_value += 50
 
-    # Summer dry season
+        elif profile == "high":
+            rainfall_value += 20
+
+        else:
+            rainfall_value -= 40
+
+    # Summer Dry Season
     elif month in ["March", "April", "May"]:
 
         if profile == "low":
-            rainfall_value -= 50
+            rainfall_value -= 80
+
+        elif profile == "moderate":
+            rainfall_value -= 20
+
+        elif profile == "high":
+            rainfall_value += 40
 
         else:
-            rainfall_value += 20
+            rainfall_value += 80
 
     # Prevent negative rainfall
     rainfall_value = max(rainfall_value, 0)
 
-    # -----------------------------
-    # Drought Classification
-    # -----------------------------
+    # ------------------------------------
+    # Rainfall Category
+    # ------------------------------------
 
-    if rainfall_value > 300:
+    if rainfall_value > 450:
+        rainfall_status = "Heavy Rainfall 🌧️"
+
+    elif rainfall_value > 200:
+        rainfall_status = "Moderate Rainfall ☁️"
+
+    else:
+        rainfall_status = "Low Rainfall ☀️"
+
+    # ------------------------------------
+    # Drought Classification
+    # ------------------------------------
+
+    if rainfall_value > 250:
         drought = "LOW 🌿"
 
-    elif rainfall_value > 120:
+    elif rainfall_value > 100:
         drought = "MEDIUM ⚠️"
 
     else:
         drought = "HIGH 🔥"
-
-    # -----------------------------
-    # Rainfall Category
-    # -----------------------------
-
-    if rainfall_value > 350:
-        rainfall_status = "Heavy Rainfall"
-
-    elif rainfall_value > 200:
-        rainfall_status = "Moderate Rainfall"
-
-    else:
-        rainfall_status = "Low Rainfall"
 
     return render_template(
         'index.html',
 
         prediction=f"{rainfall_value:.2f} mm",
 
-        drought=drought,
-
         rainfall_status=rainfall_status,
+
+        drought=drought,
 
         state=state,
 
