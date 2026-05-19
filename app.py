@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, render_template
+from flask import Flask, request, render_template
 from flask_cors import CORS
 
 import tensorflow as tf
@@ -7,7 +7,7 @@ import numpy as np
 app = Flask(__name__)
 CORS(app)
 
-# Load LSTM model
+# Load model
 model = tf.keras.models.load_model(
     "lstm_rainfall_clf_model.keras"
 )
@@ -28,43 +28,76 @@ month_map = {
     "December": 12,
 }
 
-# Home Route
+# Monsoon heavy states
+high_rainfall_states = [
+    "Goa",
+    "Kerala",
+    "Assam",
+    "West Bengal"
+]
+
+# Moderate rainfall states
+moderate_rainfall_states = [
+    "Maharashtra",
+    "Karnataka",
+    "Tamil Nadu",
+    "Gujarat"
+]
+
 @app.route('/')
 def home():
     return render_template('index.html')
 
-# Prediction Route
 @app.route('/predict', methods=['POST'])
 def predict():
 
-    # Get form data
     state = request.form['state']
     month = request.form['month']
 
-    # Convert month to number
     month_value = month_map[month]
 
-    # Prepare input for model
+    # Model input
     input_data = np.array([
         [[month_value]]
     ])
 
-    # Predict rainfall
     prediction = model.predict(input_data)
 
     rainfall_value = float(prediction[0][0])
 
-    # Improved drought logic
-    if rainfall_value > 120:
+    # -----------------------------
+    # Intelligent rainfall adjustment
+    # -----------------------------
+
+    # Heavy monsoon season
+    if month in ["June", "July", "August"]:
+
+        if state in high_rainfall_states:
+            rainfall_value += 250
+
+        elif state in moderate_rainfall_states:
+            rainfall_value += 120
+
+    # Winter dry season
+    elif month in ["December", "January", "February"]:
+        rainfall_value -= 40
+
+    # Prevent negative rainfall
+    rainfall_value = max(rainfall_value, 0)
+
+    # -----------------------------
+    # Drought classification
+    # -----------------------------
+
+    if rainfall_value > 250:
         drought = "LOW 🌿"
 
-    elif rainfall_value > 50:
+    elif rainfall_value > 100:
         drought = "MEDIUM ⚠️"
 
     else:
         drought = "HIGH 🔥"
 
-    # Render result on website
     return render_template(
         'index.html',
         prediction=f"{rainfall_value:.2f} mm",
@@ -73,6 +106,5 @@ def predict():
         month=month
     )
 
-# Run Flask app
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8080)
