@@ -12,8 +12,13 @@ model = tf.keras.models.load_model(
     "lstm_rainfall_clf_model.keras"
 )
 
-@app.route('/predict', methods=['POST'])
+# Home Route
+@app.route('/')
+def home():
+    return "Rainfall Prediction Backend Running on OpenShift!"
 
+# Prediction Route
+@app.route('/predict', methods=['POST'])
 def predict():
 
     data = request.json
@@ -22,9 +27,7 @@ def predict():
     month = data['month']
 
     # Convert month to number
-
     month_map = {
-
         "January": 1,
         "February": 2,
         "March": 3,
@@ -42,19 +45,16 @@ def predict():
     month_value = month_map[month]
 
     # Dummy input for LSTM
-
     input_data = np.array([
         [[month_value]]
     ])
 
     # Predict
-
     prediction = model.predict(input_data)
 
     rainfall_value = float(prediction[0][0])
 
     # Drought logic
-
     if rainfall_value > 700:
         drought = "LOW"
 
@@ -65,12 +65,10 @@ def predict():
         drought = "HIGH"
 
     return jsonify({
-
         "state": state,
         "month": month,
         "predicted_rainfall": f"{rainfall_value:.2f} mm",
         "drought_risk": drought
-
     })
 
 if __name__ == '__main__':
