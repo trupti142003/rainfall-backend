@@ -4,12 +4,15 @@ from flask_cors import CORS
 import tensorflow as tf
 import numpy as np
 
+import os
+
 app = Flask(__name__)
 CORS(app)
 
-# Load trained model
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
 model = tf.keras.models.load_model(
-    "lstm_rainfall_clf_model.keras"
+    os.path.join(BASE_DIR, "lstm_rainfall_clf_model.keras")
 )
 
 # Month mapping
@@ -76,7 +79,7 @@ def predict():
     ])
 
     # Base ML prediction
-    prediction = model.predict(input_data)
+    prediction = model.predict(input_data, verbose=0)
 
     rainfall_value = float(prediction[0][0])
 
