@@ -164,7 +164,7 @@ def predict():
 
     # ── Render dedicated results page ──
     return render_template(
-        'result.html',
+        'index.html',
         prediction=f"{rainfall_value:.2f} mm",
         rainfall_value=rainfall_value,
         rainfall_status=rainfall_status,
