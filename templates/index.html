@@ -1,20 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-    content="width=device-width, initial-scale=1.0">
 
-    <title>AI Rainfall Prediction</title>
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Cloud-Based Rainfall Prediction System</title>
 
     <link rel="stylesheet"
-    href="{{ url_for('static', filename='style.css') }}">
+        href="{{ url_for('static', filename='style.css') }}">
 
     <link rel="preconnect"
-    href="https://fonts.googleapis.com">
+        href="https://fonts.googleapis.com">
 
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
-    rel="stylesheet">
+        rel="stylesheet">
+
 </head>
 
 <body>
@@ -28,8 +30,8 @@
         <h1>🌧 AI Rainfall Forecast</h1>
 
         <p class="subtitle">
-            Intelligent rainfall and drought prediction
-            system powered by Deep Learning & OpenShift Cloud.
+            AI-powered rainfall forecasting system using
+            Machine Learning, Big Data Analytics and OpenShift Cloud.
         </p>
 
         <div class="weather-cards">
@@ -136,12 +138,7 @@
                 <strong>{{ rainfall_status }}</strong>
             </div>
 
-            <div class="result-item">
-                <span>Water Availability Status</span>
-                <strong>{{ water_status }}</strong>
             </div>
-
-        </div>
 
         {% endif %}
 
@@ -150,7 +147,7 @@
 </div>
 
 <footer>
-    Powered by TensorFlow • Flask • OpenShift • Deep Learning
+    Powered by TensorFlow • Flask • OpenShift • Big Data Analytics
 </footer>
 
 </body>

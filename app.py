@@ -1,9 +1,7 @@
 from flask import Flask, request, render_template
 from flask_cors import CORS
-
 import tensorflow as tf
 import numpy as np
-
 import os
 
 app = Flask(__name__)
@@ -11,6 +9,7 @@ CORS(app)
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
+# Load trained model
 model = tf.keras.models.load_model(
     os.path.join(BASE_DIR, "lstm_rainfall_clf_model.keras")
 )
@@ -34,56 +33,56 @@ month_map = {
 # State rainfall profiles
 state_profiles = {
 
-    # Very high rainfall states
+    # Very High Rainfall States
     "Goa": "very_high",
     "Kerala": "very_high",
     "Assam": "very_high",
     "Meghalaya": "very_high",
 
-    # High rainfall states
+    # High Rainfall States
     "West Bengal": "high",
     "Karnataka": "high",
     "Maharashtra": "high",
 
-    # Moderate rainfall states
+    # Moderate Rainfall States
     "Tamil Nadu": "moderate",
     "Gujarat": "moderate",
     "Madhya Pradesh": "moderate",
     "Uttar Pradesh": "moderate",
     "Bihar": "moderate",
 
-    # Low rainfall states
+    # Low Rainfall States
     "Rajasthan": "low",
     "Punjab": "low",
     "Haryana": "low",
     "Delhi": "low"
 }
 
+
 @app.route('/')
 def home():
     return render_template('index.html')
 
+
 @app.route('/predict', methods=['POST'])
 def predict():
 
-    # Get user input
+    # User Inputs
     state = request.form['state']
     month = request.form['month']
 
-    # Convert month to number
     month_value = month_map[month]
 
-    # Model input
+    # Model Input
     input_data = np.array([
         [[month_value]]
     ])
 
-    # Base ML prediction
+    # Base ML Prediction
     prediction = model.predict(input_data, verbose=0)
 
     rainfall_value = float(prediction[0][0])
 
-    # Get state rainfall profile
     profile = state_profiles.get(state, "moderate")
 
     # ------------------------------------
@@ -147,11 +146,11 @@ def predict():
         else:
             rainfall_value += 80
 
-    # Prevent negative rainfall
+    # Prevent Negative Values
     rainfall_value = max(rainfall_value, 0)
 
     # ------------------------------------
-    # Rainfall Category
+    # Rainfall Classification
     # ------------------------------------
 
     if rainfall_value > 450:
@@ -163,29 +162,14 @@ def predict():
     else:
         rainfall_status = "Low Rainfall ☀️"
 
-    # ------------------------------------
-    # Drought Classification
-    # ------------------------------------
-
-# Water Availability Status
-
-    if rainfall_value > 250:
-        water_status = "High Water Availability 💧"
-
-    elif rainfall_value > 100:
-        water_status = "Moderate Water Availability 🌿"
-
-    else:
-        water_status = "Low Water Availability ⚠️"
-
     return render_template(
-      'index.html',
-            prediction=f"{rainfall_value:.2f} mm",
+        'index.html',
+        prediction=f"{rainfall_value:.2f} mm",
         rainfall_status=rainfall_status,
-        water_status=water_status,
-            state=state,
+        state=state,
         month=month
     )
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8080)
