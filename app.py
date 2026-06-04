@@ -167,26 +167,23 @@ def predict():
     # Drought Classification
     # ------------------------------------
 
+# Water Availability Status
+
     if rainfall_value > 250:
-        drought = "LOW 🌿"
+        water_status = "High Water Availability 💧"
 
     elif rainfall_value > 100:
-        drought = "MEDIUM ⚠️"
+        water_status = "Moderate Water Availability 🌿"
 
     else:
-        drought = "HIGH 🔥"
+        water_status = "Low Water Availability ⚠️"
 
     return render_template(
-        'index.html',
-
-        prediction=f"{rainfall_value:.2f} mm",
-
+      'index.html',
+            prediction=f"{rainfall_value:.2f} mm",
         rainfall_status=rainfall_status,
-
-        drought=drought,
-
-        state=state,
-
+        water_status=water_status,
+            state=state,
         month=month
     )
 
