@@ -2,52 +2,38 @@
 <html lang="en">
 
 <head>
-
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>Cloud-Based Rainfall Prediction System</title>
-
-    <link rel="stylesheet"
-        href="{{ url_for('static', filename='style.css') }}">
-
-    <link rel="preconnect"
-        href="https://fonts.googleapis.com">
-
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
-        rel="stylesheet">
-
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
 </head>
 
 <body>
-
-<div class="overlay"></div>
 
 <div class="container">
 
     <div class="left-panel">
 
-        <h1>🌧 Cloud-Based Rainfall Prediction</h1>
+        <div class="badge">
+            <i class="ti ti-cloud-rain"></i> AI Forecast System
+        </div>
+
+        <h1>Cloud-Based<br><span class="accent">Rainfall</span><br>Prediction</h1>
 
         <p class="subtitle">
-            AI-powered rainfall forecasting system using
-            Machine Learning, Big Data Analytics and OpenShift Cloud.
+            AI-powered forecasting using machine learning, big data analytics,
+            and OpenShift cloud infrastructure.
         </p>
 
-        <div class="weather-cards">
-
-            <div class="card">
-                <h3>Machine Learning</h3>
-            </div>
-
-            <div class="card">
-                <h3>Flask</h3>
-            </div>
-
-            <div class="card">
-                <h3>Red Hat OpenShift</h3>
-            </div>
-
+        <div class="tech-chips">
+            <div class="chip"><i class="ti ti-brain"></i> Machine Learning</div>
+            <div class="chip"><i class="ti ti-brand-python"></i> TensorFlow</div>
+            <div class="chip"><i class="ti ti-server"></i> Red Hat OpenShift</div>
+            <div class="chip"><i class="ti ti-database"></i> Big Data Analytics</div>
+            <div class="chip"><i class="ti ti-topology-star"></i> Flask API</div>
         </div>
 
     </div>
@@ -56,87 +42,94 @@
 
         <form action="/predict" method="POST">
 
-            <h2>Forecast Dashboard</h2>
+            <h2 class="panel-title">Forecast Dashboard</h2>
 
-            <label>Select State</label>
+            <div class="field-group">
+                <label class="field-label">Select State</label>
+                <select name="state" required>
+                    <option value="">Choose State</option>
+                    <option {% if state == 'Goa' %}selected{% endif %}>Goa</option>
+                    <option {% if state == 'Maharashtra' %}selected{% endif %}>Maharashtra</option>
+                    <option {% if state == 'Karnataka' %}selected{% endif %}>Karnataka</option>
+                    <option {% if state == 'Kerala' %}selected{% endif %}>Kerala</option>
+                    <option {% if state == 'Tamil Nadu' %}selected{% endif %}>Tamil Nadu</option>
+                    <option {% if state == 'Gujarat' %}selected{% endif %}>Gujarat</option>
+                    <option {% if state == 'Rajasthan' %}selected{% endif %}>Rajasthan</option>
+                    <option {% if state == 'Punjab' %}selected{% endif %}>Punjab</option>
+                    <option {% if state == 'Haryana' %}selected{% endif %}>Haryana</option>
+                    <option {% if state == 'Delhi' %}selected{% endif %}>Delhi</option>
+                    <option {% if state == 'West Bengal' %}selected{% endif %}>West Bengal</option>
+                    <option {% if state == 'Assam' %}selected{% endif %}>Assam</option>
+                    <option {% if state == 'Bihar' %}selected{% endif %}>Bihar</option>
+                    <option {% if state == 'Uttar Pradesh' %}selected{% endif %}>Uttar Pradesh</option>
+                    <option {% if state == 'Madhya Pradesh' %}selected{% endif %}>Madhya Pradesh</option>
+                </select>
+            </div>
 
-            <select name="state" required>
-
-                <option value="">Choose State</option>
-
-                <option>Goa</option>
-                <option>Maharashtra</option>
-                <option>Karnataka</option>
-                <option>Kerala</option>
-                <option>Tamil Nadu</option>
-                <option>Gujarat</option>
-                <option>Rajasthan</option>
-                <option>Punjab</option>
-                <option>Haryana</option>
-                <option>Delhi</option>
-                <option>West Bengal</option>
-                <option>Assam</option>
-                <option>Bihar</option>
-                <option>Uttar Pradesh</option>
-                <option>Madhya Pradesh</option>
-
-            </select>
-
-            <label>Select Month</label>
-
-            <select name="month" required>
-
-                <option value="">Choose Month</option>
-
-                <option>January</option>
-                <option>February</option>
-                <option>March</option>
-                <option>April</option>
-                <option>May</option>
-                <option>June</option>
-                <option>July</option>
-                <option>August</option>
-                <option>September</option>
-                <option>October</option>
-                <option>November</option>
-                <option>December</option>
-
-            </select>
+            <div class="field-group">
+                <label class="field-label">Select Month</label>
+                <select name="month" required>
+                    <option value="">Choose Month</option>
+                    <option {% if month == 'January' %}selected{% endif %}>January</option>
+                    <option {% if month == 'February' %}selected{% endif %}>February</option>
+                    <option {% if month == 'March' %}selected{% endif %}>March</option>
+                    <option {% if month == 'April' %}selected{% endif %}>April</option>
+                    <option {% if month == 'May' %}selected{% endif %}>May</option>
+                    <option {% if month == 'June' %}selected{% endif %}>June</option>
+                    <option {% if month == 'July' %}selected{% endif %}>July</option>
+                    <option {% if month == 'August' %}selected{% endif %}>August</option>
+                    <option {% if month == 'September' %}selected{% endif %}>September</option>
+                    <option {% if month == 'October' %}selected{% endif %}>October</option>
+                    <option {% if month == 'November' %}selected{% endif %}>November</option>
+                    <option {% if month == 'December' %}selected{% endif %}>December</option>
+                </select>
+            </div>
 
             <button type="submit">
-                Generate Forecast
+                <i class="ti ti-radar"></i> Generate Forecast
             </button>
 
         </form>
 
         {% if prediction %}
-
         <div class="result-box">
 
-            <h2>Prediction Results</h2>
-
-            <div class="result-item">
-                <span>📍 State</span>
-                <strong>{{ state }}</strong>
+            <div class="result-header">
+                <i class="ti ti-chart-bar"></i> Prediction Results
             </div>
 
-            <div class="result-item">
-                <span>📅 Month</span>
-                <strong>{{ month }}</strong>
+            <div class="result-rows">
+
+                <div class="result-row">
+                    <span class="result-label"><i class="ti ti-map-pin"></i> State</span>
+                    <strong class="result-val">{{ state }}</strong>
+                </div>
+
+                <div class="result-row">
+                    <span class="result-label"><i class="ti ti-calendar"></i> Month</span>
+                    <strong class="result-val">{{ month }}</strong>
+                </div>
+
+                <div class="result-divider"></div>
+
+                <div class="result-rainfall">
+                    <span class="result-label"><i class="ti ti-cloud-rain"></i> Predicted Rainfall</span>
+                    <div class="rainfall-big">{{ prediction }}</div>
+                </div>
+
+                <div class="result-row">
+                    <span class="result-label"><i class="ti ti-activity"></i> Status</span>
+                    <span class="status-pill
+                        {% if 'Heavy' in rainfall_status %}status-heavy
+                        {% elif 'Moderate' in rainfall_status %}status-moderate
+                        {% else %}status-light{% endif %}">
+                        {{ rainfall_status }}
+                    </span>
+                </div>
+
             </div>
 
-            <div class="result-item">
-                <span>🌧 Predicted Rainfall</span>
-                <strong>{{ prediction }}</strong>
-            </div>
-
-            <div class="result-item">
-                <span>☁ Rainfall Status</span>
-                <strong>{{ rainfall_status }}</strong>
-            </div>
-
-            </div>
-
+        </div>
         {% endif %}
 
     </div>
@@ -144,7 +137,7 @@
 </div>
 
 <footer>
-    Powered by TensorFlow • Flask • OpenShift • Big Data Analytics
+    Powered by TensorFlow &bull; Flask &bull; OpenShift &bull; Big Data Analytics
 </footer>
 
 </body>
