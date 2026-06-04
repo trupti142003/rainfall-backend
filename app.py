@@ -162,9 +162,11 @@ def predict():
     else:
         rainfall_status = "Low Rainfall ☀️"
 
+    # ── Render dedicated results page ──
     return render_template(
-        'index.html',
+        'result.html',
         prediction=f"{rainfall_value:.2f} mm",
+        rainfall_value=rainfall_value,
         rainfall_status=rainfall_status,
         state=state,
         month=month
